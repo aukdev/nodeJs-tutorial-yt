@@ -11,8 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "formidable": "^3.5.1",
-    "inquirer": "^9.2.11"
+    "inquirer": "^9.2.11",
+    "nodemailer": "^6.9.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
