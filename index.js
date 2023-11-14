@@ -1,58 +1,42 @@
-import "dotenv/config";
+import { createConnection } from "mysql2/promise";
 import { log } from "node:console";
-import { createTransport } from "nodemailer";
-import { fileURLToPath } from "node:url";
-import { join, dirname } from "node:path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+(async () => {
+  try {
+    const db = await createConnection({
+      host: "localhost",
+      port: "3306",
+      user: "root",
+      database: "school",
+    });
 
-const mailServer = createTransport({
-  host: "smtp.office365.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.FROM_EMAIL,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
-
-log("email send start");
-
-mailServer.sendMail(
-  {
-    from: process.env.FROM_EMAIL,
-    to: process.env.TO_EMAIL,
-    subject: "new msg",
-    html: `
-    <html>
-    <head>
-    <style>
-    .text{
-        color:red;
-    }
-    </style>
-    </head>
-    <body>
-    <h1 class="text">Amila</h1>
-    <img src="https://images.pexels.com/photos/1029208/pexels-photo-1029208.jpeg" alt="image" />
-    </body>
-    </html>
-    `,
-    attachments: [
-      {
-        filename: "amila.txt",
-        path: join(__dirname, "amila.txt"),
-      },
-    ],
-  },
-  (err, infor) => {
-    if (err) {
-      log("can not send the email");
-    } else {
-      log("email sent");
-    }
+    const [result] = await db.query("SELECT l_name FROM `student_dtails`");
+    log(result);
+  } catch (error) {
+    log(error);
   }
-);
+})();
 
-log("email send end");
+// const db = createConnection({
+//   host: "localhost",
+//   port: "3306",
+//   user: "root",
+//   password: "",
+//   database: "school",
+// });
+
+// db.connect((err) => {
+//   if (err) {
+//     log(err);
+//   } else {
+//     log("db connected");
+//     const sqlQuery = "UPDATE `office_details` SET name='kumara' WHERE id = 2";
+//     db.query(sqlQuery, (err, result) => {
+//       if (err) {
+//         log(err);
+//       } else {
+//         log(result);
+//       }
+//     });
+//   }
+// });
